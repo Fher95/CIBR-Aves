@@ -21,7 +21,7 @@ dimy=90
 nPixels=16
 nCells=2
 nOrients=8
-img = imread('gorrion3.jpg')
+img = imread('gorrion/gorrion3.jpg')
 imshow(img)
 
 
@@ -65,7 +65,7 @@ plt.show()
 # In[5]:
 
 
-img2 = imread('gorrion-real.jpg')
+img2 = imread('gorrion/gorrion-real.jpg')
 imshow(img2)
 
 
