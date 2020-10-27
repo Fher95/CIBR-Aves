@@ -13,14 +13,15 @@ from skimage import exposure
 import matplotlib.pyplot as plt
 from scipy.spatial import distance
 from skimage.color import rgb2hsv
-get_ipython().run_line_magic('matplotlib', 'inline')
+import almacenarDatos
+#get_ipython().run_line_magic('matplotlib', 'inline')
 
 dimx=160
 dimy=90
 nPixels=16
 nCells=2
 nOrients=8
-img = imread('/home/fher/Documentos/Curso CIBR/gorrion3.jpg')
+img = imread('gorrion3.jpg')
 imshow(img)
 
 
@@ -64,7 +65,7 @@ plt.show()
 # In[5]:
 
 
-img2 = imread('/home/fher/Documentos/Curso CIBR/gorrion-real.jpg')
+img2 = imread('gorrion-real.jpg')
 imshow(img2)
 
 
@@ -107,7 +108,7 @@ plt.show()
 # In[9]:
 
 
-img3 = imread('/home/fher/Documentos/Curso CIBR/perro.jpg')
+img3 = imread('perro.jpg')
 imshow(img3)
 
 
@@ -167,6 +168,7 @@ distance.minkowski(fd2, fd3, 2)
 
 # In[ ]:
 
+almacenarDatos.guardar(fd)
 
 
 
