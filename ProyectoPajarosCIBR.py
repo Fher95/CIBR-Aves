@@ -13,7 +13,7 @@ from skimage import exposure
 import matplotlib.pyplot as plt
 from scipy.spatial import distance
 from skimage.color import rgb2hsv
-import almacenarDatos
+import datos
 #get_ipython().run_line_magic('matplotlib', 'inline')
 
 dimx=160
@@ -168,7 +168,7 @@ distance.minkowski(fd2, fd3, 2)
 
 # In[ ]:
 
-almacenarDatos.guardar(fd)
+datos.guardar(fd)
 
 
 
