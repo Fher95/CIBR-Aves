@@ -7,23 +7,41 @@ Created on Tue Oct 27 16:39:38 2020
 
 import json
 import numpy as np
+from Imagen import Imagen
 
-def guardar(vectorCaracteristicas):
+carpetaGuardado = 'Caracteristicas/'
+
+def guardarVecImagenes(vecImagenes, nombreDirectorio):
+    #Primero se vacía el archivo
+    nombreDirectorio = carpetaGuardado+nombreDirectorio
+    archivo = open (nombreDirectorio+'.json','w')
+    archivo.write('')
+    archivo.close()
+    for objImagen in vecImagenes:
+        guardarImagen(objImagen, nombreDirectorio)
+
+
+def guardarImagen(objImagen, nombreDirectorio):
     
-    vectorCaracteristicas = np.array(vectorCaracteristicas)
-    vectorCaracteristicas = vectorCaracteristicas.tolist()
+    vecRGB = objImagen.vecRGB.tolist()
+    vecHSV = objImagen.vecHSV.tolist()
+    vecHOG = objImagen.vecHOG.tolist()
     
     datos = {
-        'vector': vectorCaracteristicas
+        'nombreImg': objImagen.nombre,
+        'vectorRGB': vecRGB,
+        'vecHSV': vecHSV,
+        'vecHOG': vecHOG        
     }
     
     datos = json.dumps(datos)
     
-    esc = open('datos.json','a')
+    esc = open(nombreDirectorio+'.json','a')
     esc.write(datos)
     esc.write("\n")
     esc.close()
-    
+
+
     #LECTURA
     """
     lec =  open('datos.json', 'r')
