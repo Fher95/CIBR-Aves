@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Oct 30 17:00:24 2020
-
-@author: Packo
-"""
 import os
 from skimage.io import imread #, imshow
 from skimage.transform import resize
@@ -53,7 +47,7 @@ def caracteristicasImage(img):
         
         
         #Creación del objeto imagen para guardar el nombre y los vectores de caracteristicas
-        imagen_actual = Imagen("gorrion",fd, fNormRGB, fNormHSV)
+        imagen_actual = Imagen("",fd, fNormRGB, fNormHSV)
         return imagen_actual
         
 def mayorSimilitud(image_actual):
@@ -82,6 +76,6 @@ def mayorSimilitud(image_actual):
     
     print("La imagen se parece a: " + datoActual[0])
 
-img = imread('tucan.jpg')
+img = imread('gorrion.jpg')
 image_actual = caracteristicasImage(img)
 mayorSimilitud(image_actual)

@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Oct 27 16:39:38 2020
-
-@author: Packo
-"""
-
 import json
 import numpy as np
 from Imagen import Imagen
