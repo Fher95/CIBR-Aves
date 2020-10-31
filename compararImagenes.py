@@ -1,56 +1,28 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Oct 30 17:00:24 2020
+
+@author: Packo
+"""
 import os
 from skimage.io import imread #, imshow
 from skimage.transform import resize
 from skimage.feature import hog
-#from skimage import exposure
-#from scipy.spatial import distance
-#from skimage.color import rgb2hsv
 from skimage.color import rgb2gray, gray2rgb, rgb2hsv
 from skimage import filters
 from Imagen import Imagen
-from datos import guardarVecImagenes
+from datos import guardarVecImagenes, leerDatos
 import numpy as np
+from skimage.io import imread #, imshow
+from scipy.spatial import distance
 
-
-        
 dimx=160
 dimy=90
 nPixels=16
 nCells=2
 nOrients=8
-imagenPrueba = None
 
-ruta_base = 'Imagenes/'
-
-def obtenerDirectorios(ruta):
-    arrDirectorios = []    
-    content = os.listdir(ruta)
-    for fichero in content:
-        if os.path.isdir(os.path.join(ruta,fichero)) and not fichero.endswith('.git'):
-            arrDirectorios.append(fichero)
-    return arrDirectorios
-
-def obtenerSoloImagenes(ruta):
-    vecImagenes = []
-    contenido = os.listdir(ruta)
-    for fichero in contenido:
-        if os.path.isfile(os.path.join(ruta, fichero)) and (fichero.endswith('.jpg') or fichero.endswith('.jpeg')):
-            vecImagenes.append(fichero)
-    return vecImagenes
-
-def recorrerDirectorios(vecDirectorios):
-    for directorio in vecDirectorios:        
-        vecImgs = generarCaracteristicasDir(directorio)
-        guardarVecImagenes(vecImgs,directorio)
-        
-def generarCaracteristicasDir(nombreDir):
-    #contenido = os.listdir(ruta_base+nombreDir)
-    contenido = obtenerSoloImagenes(ruta_base+nombreDir)
-    arrImagenes = []
-    for nombre_imagen in contenido:
-        img = imread(ruta_base+nombreDir+'/'+nombre_imagen)    
-        
-        #Aplicamos el filtro Edge Roberts para quitar un poco las texturas de las ramas    
+def caracteristicasImage(img):
         imgGray = rgb2gray(img)
         edge_roberts = filters.roberts(imgGray)
         #Se reconfigura el tamaño para tener un vector de la misma dimension para todas las imagenes
@@ -81,12 +53,35 @@ def generarCaracteristicasDir(nombreDir):
         
         
         #Creación del objeto imagen para guardar el nombre y los vectores de caracteristicas
-        imagen_actual = Imagen(nombre_imagen,fd, fNormRGB, fNormHSV)        
-        #Se agrega al arreglo de caracteristicas de cada imagen
-        arrImagenes.append(imagen_actual)
+        imagen_actual = Imagen("gorrion",fd, fNormRGB, fNormHSV)
+        return imagen_actual
         
-    return arrImagenes
+def mayorSimilitud(image_actual):
+    datos = leerDatos()
 
+    hog = distance.minkowski(image_actual.vecHOG, datos[0]["vecHOG"],2)
+    rgb = distance.minkowski(image_actual.vecRGB, datos[0]["vectorRGB"],2)
+    hsv = distance.minkowski(image_actual.vecHSV, datos[0]["vecHSV"],2)
+    datoActual = [datos[0]["nombreImg"], rgb, hsv, hog]
+    distanciaActual = hog + rgb + hsv
+    cont = 0
     
-directorios = obtenerDirectorios(ruta_base)
-recorrerDirectorios(directorios)
+    for i in datos:
+        if(cont != 0):
+            hog = distance.minkowski(image_actual.vecHOG, i["vecHOG"],2)
+            rgb = distance.minkowski(image_actual.vecRGB, i["vectorRGB"],2)
+            hsv = distance.minkowski(image_actual.vecHSV, i["vecHSV"],2)            
+            distancia = hog + rgb + hsv            
+            dato = [i["nombreImg"], rgb, hsv, hog]
+            if(distanciaActual > distancia):
+                distanciaActual = distancia
+                datoActual = dato            
+        else:
+             cont = 1
+         
+    
+    print("La imagen se parece a: " + datoActual[0])
+
+img = imread('tucan.jpg')
+image_actual = caracteristicasImage(img)
+mayorSimilitud(image_actual)

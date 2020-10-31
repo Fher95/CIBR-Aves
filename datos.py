@@ -8,6 +8,7 @@ Created on Tue Oct 27 16:39:38 2020
 import json
 import numpy as np
 from Imagen import Imagen
+import os
 
 carpetaGuardado = 'Caracteristicas/'
 
@@ -41,7 +42,20 @@ def guardarImagen(objImagen, nombreDirectorio):
     esc.write("\n")
     esc.close()
 
-
+def leerDatos():
+    datos = []
+    contenido = os.listdir('Caracteristicas')
+    archivos = [nombre for nombre in contenido]
+    for i in archivos:
+        lec = open('Caracteristicas/'+i, 'r')
+        dato = lec.read();
+        lista = dato.split("\n")
+        lista.pop()
+        for j in lista:
+           datos.append(json.loads(j))
+        
+    return datos
+    
     #LECTURA
     """
     lec =  open('datos.json', 'r')
