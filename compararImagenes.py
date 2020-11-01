@@ -47,7 +47,7 @@ def caracteristicasImage(img):
         
         
         #Creación del objeto imagen para guardar el nombre y los vectores de caracteristicas
-        imagen_actual = Imagen("",fd, fNormRGB, fNormHSV)
+        imagen_actual = Imagen("","",fd, fNormRGB, fNormHSV)
         return imagen_actual
         
 def mayorSimilitud(image_actual):
@@ -56,7 +56,7 @@ def mayorSimilitud(image_actual):
     hog = distance.minkowski(image_actual.vecHOG, datos[0]["vecHOG"],2)
     rgb = distance.minkowski(image_actual.vecRGB, datos[0]["vectorRGB"],2)
     hsv = distance.minkowski(image_actual.vecHSV, datos[0]["vecHSV"],2)
-    datoActual = [datos[0]["nombreImg"], rgb, hsv, hog]
+    datoActual = [datos[0]["nombreGrupo"], datos[0]["nombreImg"], rgb, hsv, hog]
     distanciaActual = hog + rgb + hsv
     cont = 0
     
@@ -66,7 +66,7 @@ def mayorSimilitud(image_actual):
             rgb = distance.minkowski(image_actual.vecRGB, i["vectorRGB"],2)
             hsv = distance.minkowski(image_actual.vecHSV, i["vecHSV"],2)            
             distancia = hog + rgb + hsv            
-            dato = [i["nombreImg"], rgb, hsv, hog]
+            dato = [i["nombreGrupo"],i["nombreImg"], rgb, hsv, hog]
             if(distanciaActual > distancia):
                 distanciaActual = distancia
                 datoActual = dato            
@@ -74,8 +74,9 @@ def mayorSimilitud(image_actual):
              cont = 1
          
     
-    print("La imagen se parece a: " + datoActual[0])
+    print("La imagen pertenece al grupo: " + datoActual[0])
+    #print("La imagen más parecida es:" + datoActual[1])
 
-img = imread('gorrion.jpg')
+img = imread('aguila2.jpg')
 image_actual = caracteristicasImage(img)
 mayorSimilitud(image_actual)

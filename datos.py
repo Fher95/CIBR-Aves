@@ -23,6 +23,7 @@ def guardarImagen(objImagen, nombreDirectorio):
     
     datos = {
         'nombreImg': objImagen.nombre,
+        'nombreGrupo': objImagen.nombreGrupo,
         'vectorRGB': vecRGB,
         'vecHSV': vecHSV,
         'vecHOG': vecHOG        

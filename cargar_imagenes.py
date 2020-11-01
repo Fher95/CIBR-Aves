@@ -85,7 +85,7 @@ def generarCaracteristicasDir(nombreDir):
         
         
         #Creación del objeto imagen para guardar el nombre y los vectores de caracteristicas
-        imagen_actual = Imagen(nombreDir,fd, fNormRGB, fNormHSV)        
+        imagen_actual = Imagen(nombre_imagen,nombreDir,fd, fNormRGB, fNormHSV)        
         #Se agrega al arreglo de caracteristicas de cada imagen
         arrImagenes.append(imagen_actual)
         
