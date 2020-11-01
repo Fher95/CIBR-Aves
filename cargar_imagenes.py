@@ -39,9 +39,13 @@ def obtenerSoloImagenes(ruta):
     return vecImagenes
 
 def recorrerDirectorios(vecDirectorios):
+    print('Inicia procesamiento de imagenes...')
     for directorio in vecDirectorios:        
+        print('Extrayendo caracteristicas de',directorio,'...')
         vecImgs = generarCaracteristicasDir(directorio)
         guardarVecImagenes(vecImgs,directorio)
+        print(directorio,'finalizado.')        
+    print('Se proceesaron todas las imagenes.')
         
 def generarCaracteristicasDir(nombreDir):
     #contenido = os.listdir(ruta_base+nombreDir)
