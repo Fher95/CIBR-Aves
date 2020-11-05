@@ -2,16 +2,11 @@ import os
 from skimage.io import imread #, imshow
 from skimage.transform import resize
 from skimage.feature import hog
-#from skimage import exposure
-#from scipy.spatial import distance
-#from skimage.color import rgb2hsv
 from skimage.color import rgb2gray, gray2rgb, rgb2hsv
 from skimage import filters
 from Imagen import Imagen
 from datos import guardarVecImagenes
 import numpy as np
-
-
         
 dimx=160
 dimy=90
@@ -62,8 +57,7 @@ def generarCaracteristicasDir(nombreDir):
         # Extracción de la caracteristica HOG
         fd, hog_image = hog(gray2rgb(resized_img), orientations=nOrients, pixels_per_cell=(nPixels, nPixels), 
                         cells_per_block=(nCells, nCells), visualize=True, multichannel=True)
-                
-        
+                    
         #Valores medios de los planos RGB
         meanR = np.mean(img[:,:,0]) # Plano R
         meanG = np.mean(img[:,:,1]) # Plano G
@@ -81,8 +75,7 @@ def generarCaracteristicasDir(nombreDir):
         
         #Normalizacion de los vectores de color
         fNormRGB = fColorRGB / np.linalg.norm(fColorRGB)
-        fNormHSV = fColorHSV / np.linalg.norm(fColorHSV)
-        
+        fNormHSV = fColorHSV / np.linalg.norm(fColorHSV)        
         
         #Creación del objeto imagen para guardar el nombre y los vectores de caracteristicas
         imagen_actual = Imagen(nombre_imagen,nombreDir,fd, fNormRGB, fNormHSV)        
@@ -90,7 +83,6 @@ def generarCaracteristicasDir(nombreDir):
         arrImagenes.append(imagen_actual)
         
     return arrImagenes
-
     
 directorios = obtenerDirectorios(ruta_base)
 recorrerDirectorios(directorios)
