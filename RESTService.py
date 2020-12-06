@@ -12,40 +12,42 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-
-@app.route('/prueba', methods=['GET'])
-def cualquier():
-    print('Entra a la prueba')
-    return 'Maldito coso no funciona'
-    
-@app.route('/buscarImagen', methods=['POST'])
-def pruebaPost():
-    print('ENTRA AL POST DE BUSCAR IMAGEN...');
-    req_data = request.get_json()
-    strImg = req_data['base64img']    
-    print('String recibido:', strImg)
-    strImg = strImg.replace('data:image/jpeg;base64,','')
-    im = Image.open(BytesIO(base64.b64decode(strImg)))
-    im.save('imagenRecibida.jpg', 'JPEG')
-    result = recuperarContenidoImagen('imagenRecibida.jpg')
-    print('Data Result: ', result)
-    result2 = convertirListaImagensAJson(result)
-    print('RESULT2: ', result2)
-    return result2
-
-def convertirListaImagensAJson(vecImagenes):
-    strRes = '{'
-    for element in vecImagenes:
-        obj = {'nombreGrupo': element[0], 'nombreImagen': element[1], 'distancia': element[2]}
+def convertirListaImagensAJson(parLista):
+    {'topImagenes': {}, 'topGrupos': {} }
+    strRes = '['
+    for element in parLista:
+        obj = {}
+        if len(element) == 3:
+            obj = {'nombreGrupo': element[0], 'nombreImagen': element[1], 'distancia': element[2]}
+        else:
+            obj = {'nombreGrupo': element[0], 'numeroOcurrencias': element[1]}
         json_string = json.dumps(obj)
         strRes += json_string
         strRes += ','
     strRes = strRes[:-1]
-    strRes += '}'
+    strRes += ']'
     return strRes
 
-
+def crearRespuesta(lista1,lista2):
+    strTopImagenes = convertirListaImagensAJson(lista1)
+    strTopGrupos = convertirListaImagensAJson(lista2)        
+    objRes = {'topImagenes': json.loads(strTopImagenes), 'topGrupos': json.loads(strTopGrupos)}
+    strRes = json.dumps(objRes)
+    return objRes;
     
+@app.route('/buscarImagen', methods=['POST'])
+def pruebaPost():
+    print('Comenzando proceso de recuperación de imagenes...');
+    req_data = request.get_json()
+    strImg = req_data['base64img']    
+    strImg = strImg.replace('data:image/jpeg;base64,','')
+    im = Image.open(BytesIO(base64.b64decode(strImg)))
+    im.save('imagenRecibida.jpg', 'JPEG')
+    topImagenes, topGrupos = recuperarContenidoImagen('imagenRecibida.jpg')    
+    result = crearRespuesta(topImagenes,topGrupos) 
+    print('Finalizada recuperación de imagenes. Enviando resultados. ')
+    return result
+
 
 if __name__ == '__main__':
      app.run(port='5002')

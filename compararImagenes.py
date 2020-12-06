@@ -19,16 +19,24 @@ nOrients=8
 topImagenes = []
 
 def clasificarEnTop(datoImagen):
-    if (len(topImagenes) == 0):
-        topImagenes.append(datoImagen)
-        return
-    if (len(topImagenes) < 10):
+    if datoImagen not in topImagenes:
         topImagenes.append(datoImagen)
         topImagenes.sort(key=lambda imagen : imagen[5])
-    else :
-        topImagenes.append(datoImagen)
-        topImagenes.sort(key=lambda imagen : imagen[5])
-        topImagenes.pop()
+        if len(topImagenes) > 10:
+            topImagenes.pop()    
+
+def ordenarConcurrenciaGrupos(listaTop):
+    vecRes = []    
+    for imgFeatures in listaTop:
+        vecNombres = [fila[0] for fila in vecRes]
+        nombreGrupoActual = imgFeatures[0]
+        if nombreGrupoActual not in vecNombres:
+            vecRes.append([nombreGrupoActual,0])        
+        for i in range(len(vecRes)):
+            if vecRes[i][0] == nombreGrupoActual:
+                vecRes[i][1] = vecRes[i][1] + 1
+    vecRes.sort(key=lambda grupo : grupo[1], reverse=True)
+    return vecRes
 
 
 def caracteristicasImage(img):
@@ -69,7 +77,8 @@ def mayorSimilitud(image_actual):
     print("Comienza comparación de la imagen")
     print("Leyendo datos...")
     datos = leerDatos()
-
+    print("...Lectura de datos finalizada.")
+    print("Comienza comparacion de datos...")
     hog = distance.minkowski(image_actual.vecHOG, datos[0]["vecHOG"],2)
     rgb = distance.minkowski(image_actual.vecRGB, datos[0]["vectorRGB"],2)
     hsv = distance.minkowski(image_actual.vecHSV, datos[0]["vecHSV"],2)
@@ -77,10 +86,11 @@ def mayorSimilitud(image_actual):
     distanciaActual = hog + rgb + hsv
     datoActual.append(datoActual)
     cont = 0
-    
+    iteracion = 0
+
     for i in datos:
-        cadena = "Comparando imagen " + str(cont) + '\r'
-        print(cadena)
+        iteracion = iteracion + 1        
+        # print('\rComparando imagen ',iteracion)
         if(cont != 0):
             hog = distance.minkowski(image_actual.vecHOG, i["vecHOG"],2)
             rgb = distance.minkowski(image_actual.vecRGB, i["vectorRGB"],2)
@@ -93,44 +103,25 @@ def mayorSimilitud(image_actual):
                 datoActual = dato            
         else:
              cont = 1
-         
-    
-    print("La imagen pertenece al grupo: " + datoActual[0])
-    print("top 10 imagenes: ", topImagenes)
+             
+    print("Comparacion de datos finalizada.")    
     return  topImagenes
-    #print("La imagen más parecida es:" + datoActual[1])
-
-def ordenarConcurrenciaGrupos(listaTop):
-    vecRes = []
-    # for i in range (len(listaTop)):
-    #     vecRes.append(["",""])
-    
-    for imgFeatures in listaTop:
-        vecNombres = [fila[0] for fila in vecRes]
-        nombreGrupoActual = imgFeatures[0]
-        if nombreGrupoActual not in vecNombres:
-            vecRes.append([nombreGrupoActual,0])        
-        for i in range(len(vecRes)):
-            if vecRes[i][0] == nombreGrupoActual:
-                vecRes[i][1] = vecRes[i][1] + 1
-    vecRes.sort(key=lambda grupo : grupo[1], reverse=True)
-    return vecRes
-            
+    #print("La imagen más parecida es:" + datoActual[1])            
 
 def recuperarContenidoImagen(rutaImg):
     img  = imread(rutaImg)
     img_features = caracteristicasImage(img)
-    topImagenes = mayorSimilitud(img_features)    
+    topImagenes = mayorSimilitud(img_features)
+    topGrupos = ordenarConcurrenciaGrupos(topImagenes)
     vecRes = []
     for element in topImagenes:
         objInfoImg = element[:2]
         objInfoImg.append(element[5])
         vecRes.append(objInfoImg)
-    return vecRes
+    return vecRes, topGrupos
     
 # recuperarContenidoImagen('gorrion.jpg')
 # print("Top Grupos: ", ordenarConcurrenciaGrupos(topImagenes))
-
 # img = imread('gorrion.jpg')
 # image_actual = caracteristicasImage(img)
 # mayorSimilitud(image_actual)
