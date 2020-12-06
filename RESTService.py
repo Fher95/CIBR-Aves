@@ -26,14 +26,24 @@ def pruebaPost():
     print('String recibido:', strImg)
     strImg = strImg.replace('data:image/jpeg;base64,','')
     im = Image.open(BytesIO(base64.b64decode(strImg)))
-    im.save('imagenRecibida.jpg', 'JPG')
-    # result = recuperarContenidoImagen('imagenRecibida.jpg')
-    # print('Data Result: ', result)
-    return 'Finalizo el llamado.'
+    im.save('imagenRecibida.jpg', 'JPEG')
+    result = recuperarContenidoImagen('imagenRecibida.jpg')
+    print('Data Result: ', result)
+    result2 = convertirListaImagensAJson(result)
+    print('RESULT2: ', result2)
+    return result2
 
 def convertirListaImagensAJson(vecImagenes):
+    strRes = '{'
     for element in vecImagenes:
-        obj = {nombreGrupo: element[0]}
+        obj = {'nombreGrupo': element[0], 'nombreImagen': element[1], 'distancia': element[2]}
+        json_string = json.dumps(obj)
+        strRes += json_string
+        strRes += ','
+    strRes = strRes[:-1]
+    strRes += '}'
+    return strRes
+
 
     
 

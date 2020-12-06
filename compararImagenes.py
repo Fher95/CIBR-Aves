@@ -124,7 +124,7 @@ def recuperarContenidoImagen(rutaImg):
     vecRes = []
     for element in topImagenes:
         objInfoImg = element[:2]
-        objInfoImg.push(element[5])
+        objInfoImg.append(element[5])
         vecRes.append(objInfoImg)
     return vecRes
     
