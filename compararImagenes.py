@@ -23,7 +23,14 @@ def clasificarEnTop(datoImagen):
         topImagenes.append(datoImagen)
         topImagenes.sort(key=lambda imagen : imagen[5])
         if len(topImagenes) > 10:
-            topImagenes.pop()    
+            topImagenes.pop()
+
+def clasificarEnTop2(datoImagen, parLista):
+    if datoImagen not in parLista:
+        parLista.append(datoImagen)
+        parLista.sort(key=lambda imagen : imagen[5])
+        if len(parLista) > 10:
+            parLista.pop()
 
 def ordenarConcurrenciaGrupos(listaTop):
     vecRes = []    
@@ -73,7 +80,8 @@ def caracteristicasImage(img):
         imagen_actual = Imagen("","",fd, fNormRGB, fNormHSV)
         return imagen_actual
         
-def mayorSimilitud(image_actual):
+def mayorSimilitud(image_actual):    
+    listaTop = []
     print("Comienza comparación de la imagen")
     print("Leyendo datos...")
     datos = leerDatos()
@@ -97,7 +105,8 @@ def mayorSimilitud(image_actual):
             hsv = distance.minkowski(image_actual.vecHSV, i["vecHSV"],2)            
             distancia = hog + rgb + hsv            
             dato = [i["nombreGrupo"],i["nombreImg"], rgb, hsv, hog, distancia]
-            clasificarEnTop(dato)
+            # clasificarEnTop(dato)
+            clasificarEnTop2(dato, listaTop)
             if(distanciaActual > distancia):
                 distanciaActual = distancia
                 datoActual = dato            
@@ -105,12 +114,14 @@ def mayorSimilitud(image_actual):
              cont = 1
              
     print("Comparacion de datos finalizada.")    
-    return  topImagenes
+    # return  topImagenes
+    return  listaTop
     #print("La imagen más parecida es:" + datoActual[1])            
 
 def recuperarContenidoImagen(rutaImg):
     img  = imread(rutaImg)
-    img_features = caracteristicasImage(img)
+    img_features = caracteristicasImage(img)  
+    # global topImagenes.clear()  
     topImagenes = mayorSimilitud(img_features)
     topGrupos = ordenarConcurrenciaGrupos(topImagenes)
     vecRes = []
