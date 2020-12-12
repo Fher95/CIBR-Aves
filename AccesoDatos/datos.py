@@ -1,6 +1,6 @@
 import json
 import numpy as np
-from Imagen import Imagen
+from .Imagen import Imagen
 import os
 
 carpetaGuardado = 'Caracteristicas/'

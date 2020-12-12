@@ -4,8 +4,8 @@ from skimage.transform import resize
 from skimage.feature import hog
 from skimage.color import rgb2gray, gray2rgb, rgb2hsv
 from skimage import filters
-from Imagen import Imagen
-from datos import guardarVecImagenes, leerDatos
+from AccesoDatos.Imagen import Imagen
+from AccesoDatos.datos import leerDatos
 import numpy as np
 from skimage.io import imread #, imshow
 from scipy.spatial import distance
@@ -17,13 +17,6 @@ nCells=2
 nOrients=8
 
 topImagenes = []
-
-def clasificarEnTop(datoImagen):
-    if datoImagen not in topImagenes:
-        topImagenes.append(datoImagen)
-        topImagenes.sort(key=lambda imagen : imagen[5])
-        if len(topImagenes) > 10:
-            topImagenes.pop()
 
 def clasificarEnTop2(datoImagen, parLista):
     if datoImagen not in parLista:
@@ -97,8 +90,7 @@ def mayorSimilitud(image_actual):
     iteracion = 0
 
     for i in datos:
-        iteracion = iteracion + 1        
-        # print('\rComparando imagen ',iteracion)
+        iteracion = iteracion + 1                
         if(cont != 0):
             hog = distance.minkowski(image_actual.vecHOG, i["vecHOG"],2)
             rgb = distance.minkowski(image_actual.vecRGB, i["vectorRGB"],2)
@@ -113,15 +105,12 @@ def mayorSimilitud(image_actual):
         else:
              cont = 1
              
-    print("Comparacion de datos finalizada.")    
-    # return  topImagenes
-    return  listaTop
-    #print("La imagen más parecida es:" + datoActual[1])            
+    print("Comparacion de datos finalizada.")        
+    return  listaTop       
 
 def recuperarContenidoImagen(rutaImg):
     img  = imread(rutaImg)
-    img_features = caracteristicasImage(img)  
-    # global topImagenes.clear()  
+    img_features = caracteristicasImage(img)      
     topImagenes = mayorSimilitud(img_features)
     topGrupos = ordenarConcurrenciaGrupos(topImagenes)
     vecRes = []

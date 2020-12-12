@@ -4,8 +4,8 @@ from skimage.transform import resize
 from skimage.feature import hog
 from skimage.color import rgb2gray, gray2rgb, rgb2hsv
 from skimage import filters
-from Imagen import Imagen
-from datos import guardarVecImagenes
+from AccesoDatos.Imagen import Imagen
+from AccesoDatos.datos import guardarVecImagenes
 import numpy as np
         
 dimx=160
