@@ -15,7 +15,7 @@ nCells=2
 nOrients=8
 imagenPrueba = None
 
-ruta_base = 'dataset/'
+ruta_base = '../dataset/'
 
 def obtenerDirectorios(ruta):
     arrDirectorios = []    
@@ -82,7 +82,4 @@ def generarCaracteristicasDir(nombreDir):
             #Se agrega al arreglo de caracteristicas de cada imagen
             arrImagenes.append(imagen_actual)
         
-    return arrImagenes
-    
-# directorios = obtenerDirectorios(ruta_base)
-# recorrerDirectorios(directorios)
+    return arrImagenes    

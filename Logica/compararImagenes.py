@@ -1,4 +1,3 @@
-import os
 from skimage.io import imread #, imshow
 from skimage.transform import resize
 from skimage.feature import hog
@@ -15,8 +14,6 @@ dimy=90
 nPixels=16
 nCells=2
 nOrients=8
-
-topImagenes = []
 
 def clasificarEnTop2(datoImagen, parLista):
     if datoImagen not in parLista:
@@ -38,7 +35,6 @@ def ordenarConcurrenciaGrupos(listaTop):
     vecRes.sort(key=lambda grupo : grupo[1], reverse=True)
     return vecRes
 
-
 def caracteristicasImage(img):
         imgGray = rgb2gray(img)
         edge_roberts = filters.roberts(imgGray)
@@ -47,8 +43,7 @@ def caracteristicasImage(img):
         # Extracción de la caracteristica HOG
         fd, hog_image = hog(gray2rgb(resized_img), orientations=nOrients, pixels_per_cell=(nPixels, nPixels), 
                         cells_per_block=(nCells, nCells), visualize=True, multichannel=True)
-                
-        
+                        
         #Valores medios de los planos RGB
         meanR = np.mean(img[:,:,0]) # Plano R
         meanG = np.mean(img[:,:,1]) # Plano G
@@ -67,8 +62,7 @@ def caracteristicasImage(img):
         #Normalizacion de los vectores de color
         fNormRGB = fColorRGB / np.linalg.norm(fColorRGB)
         fNormHSV = fColorHSV / np.linalg.norm(fColorHSV)
-        
-        
+                
         #Creación del objeto imagen para guardar el nombre y los vectores de caracteristicas
         imagen_actual = Imagen("","",fd, fNormRGB, fNormHSV)
         return imagen_actual
@@ -119,9 +113,3 @@ def recuperarContenidoImagen(rutaImg):
         objInfoImg.append(element[5])
         vecRes.append(objInfoImg)
     return vecRes, topGrupos
-    
-# recuperarContenidoImagen('gorrion.jpg')
-# print("Top Grupos: ", ordenarConcurrenciaGrupos(topImagenes))
-# img = imread('gorrion.jpg')
-# image_actual = caracteristicasImage(img)
-# mayorSimilitud(image_actual)

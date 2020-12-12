@@ -1,6 +1,4 @@
 import json
-import numpy as np
-from .Imagen import Imagen
 import os
 
 carpetaGuardado = 'Caracteristicas/'
@@ -13,7 +11,6 @@ def guardarVecImagenes(vecImagenes, nombreDirectorio):
     archivo.close()
     for objImagen in vecImagenes:
         guardarImagen(objImagen, nombreDirectorio)
-
 
 def guardarImagen(objImagen, nombreDirectorio):
     
@@ -29,8 +26,7 @@ def guardarImagen(objImagen, nombreDirectorio):
         'vecHOG': vecHOG        
     }
     
-    datos = json.dumps(datos)
-    
+    datos = json.dumps(datos)    
     esc = open(nombreDirectorio+'.json','a')
     esc.write(datos)
     esc.write("\n")
@@ -46,16 +42,5 @@ def leerDatos():
         lista = dato.split("\n")
         lista.pop()
         for j in lista:
-           datos.append(json.loads(j))
-        
+           datos.append(json.loads(j))        
     return datos
-    
-    #LECTURA
-    """
-    lec =  open('datos.json', 'r')
-    cadenas = lec.read()
-    lec.close()
-    lista = cadenas.split("\n")
-    dato = json.loads(lista[0])
-    print(dato["nombre"])
-    """
