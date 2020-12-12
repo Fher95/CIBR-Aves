@@ -3,10 +3,8 @@ import json
 import base64
 from PIL import Image
 from io import BytesIO
-import subprocess
-from compararImagenes import recuperarContenidoImagen
+from Logica.compararImagenes  import recuperarContenidoImagen
 from flask_cors import CORS, cross_origin
-#from flask.ext.jsonpify import jsonify
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -48,6 +46,7 @@ def pruebaPost():
     print('Finalizada recuperación de imagenes. Enviando resultados. ')
     return result
 
+def iniciarServer():
+    app.run(port='5002')
 
-if __name__ == '__main__':
-     app.run(port='5002')
+
